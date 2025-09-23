@@ -8,8 +8,8 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('nome')
       table.integer('curso_id').unsigned().references('id').inTable('cursos')
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table.datetime('created_at').notNullable()
+      table.datetime('updated_at').notNullable()
     })
   }
 

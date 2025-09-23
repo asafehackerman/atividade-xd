@@ -12,8 +12,9 @@ export default class extends BaseSchema {
 
       table.integer('papel_id').unsigned().references('id').inTable('papels')
 
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.datetime('created_at').notNullable()
+      table.datetime('updated_at').notNullable()
+      
     })
   }
 
