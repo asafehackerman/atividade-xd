@@ -20,7 +20,6 @@ export default function Create() {
     const [load, setLoad] = useState(true)
     const [data, setData] = useState([])
     const [classHour, setClassHour] = useState(1)
-    const [student, setStudent] = useState(0)
     const [course, setCourse] = useState(0)
     const navigate = useNavigate();
     // const { user } = useContext(UserContext);
@@ -32,7 +31,7 @@ export default function Create() {
         setLoad(true) 
         setTimeout(() => {
     
-            Client.get('disciplinas/create').then(res => {
+            Client.get('alunos/create').then(res => {
                 const cursos = res.data
                 console.log(cursos)
                 setData(cursos.data)
@@ -51,7 +50,7 @@ export default function Create() {
         // Não Autenticado   
         if(!dataUser) navigate('/login')
         // Não Autorizado (rota anterior)
-        else if(permissions.createDisciplina === 0) navigate(-1)
+        else if(permissions.createAluno === 0) navigate(-1)
     }
 
     useEffect(() => {
@@ -61,16 +60,16 @@ export default function Create() {
 
     function sendData() {
 
-        const disciplina = { nome: name, carga: classHour, curso_id: course }
+        const aluno = { nome: name, curso_id: course }
         
-        Client.post('disciplinas', disciplina).then(response => {
+        Client.post('alunos', aluno).then(response => {
             console.log(response.data);
         })
         .catch(error => {
             console.error(error);
         });
 
-        navigate('/disciplinas')
+        navigate('/alunos')
     }
 
     return (
@@ -93,14 +92,6 @@ export default function Create() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
-                    <Label>Carga Horária (nr. aulas)</Label>
-                    <Input
-                        type="number" 
-                        id="class" 
-                        name="class" 
-                        value={classHour}
-                        onChange={(e) => setClassHour(e.target.value)}
-                    />
                     <Label>Curso</Label>
                     <Select name="course" id="course" onChange={(e) => setCourse(e.target.value)}>
                         {
@@ -111,7 +102,7 @@ export default function Create() {
                             ))
                         }
                     </Select>
-                    <Submit value="Voltar" onClick={() => navigate('/disciplinas')  }/>
+                    <Submit value="Voltar" onClick={() => navigate('/alunos')  }/>
                     <Submit value="Cadastrar" onClick={() => sendData() }/>
                 </Container>
             }

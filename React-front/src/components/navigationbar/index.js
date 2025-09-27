@@ -67,14 +67,14 @@ function NavigationBar() {
               </svg>
               <span className="ms-1 fw-bolder">Disciplinas</span>
             </Nav.Link>
-            <Nav.Link onClick={() => navigate('/disciplinas')}>
+            <Nav.Link onClick={() => navigate('/alunos')}>
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#555" className="bi bi-person-badge" viewBox="0 0 16 16">
                 <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                 <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492z"/>
               </svg>
               <span className="ms-1 fw-bolder">Alunos</span>
             </Nav.Link>
-            <Nav.Link onClick={() => navigate('/cursos')}>
+            <Nav.Link onClick={() => navigate('/matriculas')}>
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#555" class="bi bi-journal-check" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
                 <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>

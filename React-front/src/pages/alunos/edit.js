@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router';
 import { useState, useEffect, useContext } from 'react';
-import { Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
+import { Container, Modal, Button } from 'react-bootstrap';
 import { OrbitProgress } from "react-loading-indicators";
 import NavigationBar from '../../components/navigationbar';
 import { 
@@ -14,25 +15,27 @@ import { Client } from '../../api/client';
 import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
 
-export default function Create() {
+export default function Edit() {
 
-    const [name, setName] = useState('')
+    const location = useLocation();
+    const aluno = location.state?.item;
+    
+    const [name, setName] = useState(aluno.nome)
     const [load, setLoad] = useState(true)
+    const [course, setCourse] = useState(aluno.curso_id)
     const [data, setData] = useState([])
-    const [classHour, setClassHour] = useState(1)
-    const [student, setStudent] = useState(0)
-    const [course, setCourse] = useState(0)
+    const [show, setShow] = useState(false);
     const navigate = useNavigate();
     // const { user } = useContext(UserContext);
     const permissions = getPermissions()
     const dataUser  = getDataUser()
-    
+
     function fetchData() {
     
         setLoad(true) 
         setTimeout(() => {
     
-            Client.get('disciplinas/create').then(res => {
+            Client.get('alunos/create').then(res => {
                 const cursos = res.data
                 console.log(cursos)
                 setData(cursos.data)
@@ -47,31 +50,34 @@ export default function Create() {
         }, 1000)
     }
 
-    function verifyPermission() {
-        // Não Autenticado   
-        if(!dataUser) navigate('/login')
-        // Não Autorizado (rota anterior)
-        else if(permissions.createDisciplina === 0) navigate(-1)
-    }
+    function updateAluno() {
 
-    useEffect(() => {
-        verifyPermission()
-        fetchData()
-    }, []);
-
-    function sendData() {
-
-        const disciplina = { nome: name, carga: classHour, curso_id: course }
+        const upAluno = { nome: name, curso_id: course }
         
-        Client.post('disciplinas', disciplina).then(response => {
-            console.log(response.data);
+        Client.put("alunos/" + aluno.id, upAluno).then(response => {
+            setShow(true);
         })
         .catch(error => {
             console.error(error);
         });
-
-        navigate('/disciplinas')
     }
+
+    const handleClose = () => {
+        setShow(false)
+        navigate('/alunos')
+    }
+
+    function verifyPermission() {
+        // Não Autenticado   
+        if(!dataUser) navigate('/login')
+        // Não Autorizado (rota anterior)
+        else if(permissions.editAluno === 0) navigate(-1)
+    }
+    
+    useEffect(() => {
+        verifyPermission()
+        fetchData()
+    }, []);
 
     return (
         <>
@@ -83,7 +89,6 @@ export default function Create() {
                         <OrbitProgress variant="spokes" color="#32cd32" size="medium" text="" textColor="" />
                     </Container>
                 :
-             
                 <Container className='mt-2'>
                     <Label>Nome</Label>
                     <Input
@@ -93,29 +98,44 @@ export default function Create() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
-                    <Label>Carga Horária (nr. aulas)</Label>
-                    <Input
-                        type="number" 
-                        id="class" 
-                        name="class" 
-                        value={classHour}
-                        onChange={(e) => setClassHour(e.target.value)}
-                    />
                     <Label>Curso</Label>
                     <Select name="course" id="course" onChange={(e) => setCourse(e.target.value)}>
                         {
                             data.map((element, index) => (
-                                <option key={index} value={element.id}>
-                                    {element.nome}
-                                </option>
+                                element.id == aluno.curso_id
+                                ?
+                                    <option key={index} value={element.id} selected>
+                                        {element.nome}
+                                    </option>
+                                :
+                                    <option key={index} value={element.id}>
+                                        {element.nome}
+                                    </option>
                             ))
                         }
                     </Select>
-                    <Submit value="Voltar" onClick={() => navigate('/disciplinas')  }/>
-                    <Submit value="Cadastrar" onClick={() => sendData() }/>
+
+                    <Submit value="Voltar" onClick={() => navigate('/alunos')  }/>
+                    <Submit value="Alterar" onClick={() => updateAluno() }/>
                 </Container>
             }
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Atualização - Usuário</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Operação Efetuda com Sucesso!!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleClose}>OK</Button>
+                </Modal.Footer>
+            </Modal>
+            
         </>
+
     )
     
 }
